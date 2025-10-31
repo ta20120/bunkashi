@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>まじヤバい！✨きゅるるん💖日本文化史ドリルやで！(クイズ改善版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Soft Pastel Pink & Lavender (めっちゃ可愛いカラーやん！) -->
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+        }
+        .nav-btn {
+            /* ナビボタンも優しくするね */
+            @apply px-4 py-2 text-lg font-medium text-gray-500 border-b-4 border-transparent transition-all duration-300;
+        }
+        .nav-btn.active {
+            /* アクティブな色は可愛いピンク！ */
+            @apply text-pink-500 border-pink-400 font-extrabold;
+        }
+        .content-section {
+            @apply hidden;
+        }
+        .content-section.active {
+            @apply block;
+        }
+        .card {
+            /* カードはふんわり丸くて優しい影にするね */
+            @apply bg-white p-6 rounded-3xl shadow-xl border border-pink-100 transition-shadow duration-300 hover:shadow-2xl hover:scale-[1.01];
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+                max-height: 500px;
+            }
+        }
+        /* Quiz specific styles - 重点的に修正 */
+        .quiz-option {
+            /* 選択肢を大きく、パディング多めにして見やすくするで！ */
+            @apply flex items-center p-4 rounded-xl border border-pink-300 cursor-pointer transition duration-200 bg-white shadow-sm;
+        }
+        .quiz-option:hover {
+            @apply bg-pink-50 border-pink-400 shadow-md;
+        }
+        .quiz-option input[type="radio"] {
+            /* ラジオボタンもピンクにするね */
+            @apply w-5 h-5 text-pink-500 bg-pink-100 border-pink-300 focus:ring-pink-500;
+        }
+        .quiz-check-btn {
+            /* ボタンはキラキラ可愛く！ */
+            @apply bg-pink-500 text-white font-extrabold py-3 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 mt-6 transform hover:scale-105;
+        }
+        .quiz-result-box {
+            /* 結果ボックスは問題とハッキリ区別！ */
+            @apply p-5 mt-6 rounded-2xl font-semibold shadow-xl border-t-4;
+        }
+        .quiz-explanation {
+            /* 解説テキストの改行をちゃんと表示させるで！ */
+            @apply text-sm mt-3 pt-3 border-t border-dashed border-gray-300 block whitespace-pre-wrap;
+        }
+        /* Dynamic Quiz Loading Spinner Styles */
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #EC4899; /* Pink-500 */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-purple-50 text-gray-800">
+
+    <header class="bg-white shadow-2xl">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-pink-600 text-center flex items-center justify-center">
+                まじヤバい！✨きゅるるん💖日本文化史ドリルやで！
+            </h1>
+            <p class="text-center text-gray-500 text-xl mt-2">飛鳥から室町まで、文化の変わり目をいっぺんに見てまうで！めっちゃ楽しいやん！ほな行くで！💨</p>
+        </div>
+    </header>
+
+    <nav class="bg-white sticky top-0 z-10 shadow-md border-b-2 border-pink-100">
+        <div class="container mx-auto flex justify-center space-x-2 md:space-x-4" id="main-nav">
+            <button class="nav-btn active" data-target="era">時代の流れをチェックや！</button>
+            <button class="nav-btn" data-target="theme">テーマ別で比べよか！</button>
+            <button class="nav-btn" data-target="quiz">ドキドキ💕実力試しや！</button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- ===== 1. 時代の流れをチェックや！ (デフォルト) ===== -->
+        <section id="content-era" class="content-section active">
+            
+            <nav class="flex flex-wrap justify-center gap-3 mb-10">
+                <button class="era-tab-btn active px-4 py-2 bg-pink-400 text-white rounded-full shadow-lg hover:bg-pink-500 transition font-bold" data-era="asuka">飛鳥時代やん！</button>
+                <button class="era-tab-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-era="hakuho">白鳳時代やん！</button>
+                <button class="era-tab-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-era="tenpyo">天平時代やん！</button>
+                <button class="era-tab-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-era="konin">弘仁・貞観時代やん！</button>
+                <button class="era-tab-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-era="kokufu">国風時代やん！</button>
+                <button class="era-tab-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-era="insei">院政期時代やん！</button>
+                <button class="era-tab-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-era="kamakura">鎌倉時代やん！</button>
+                <button class="era-tab-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-era="muromachi">室町時代やん！</button>
+            </nav>
+
+            <div id="era-content-container" class="space-y-12">
+                
+                <!-- 飛鳥文化 -->
+                <article id="era-asuka" class="era-content active space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">ドーン！💖飛鳥文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        日本で一番最初のガチな仏教文化やねん！<br>
+                        蘇我氏が中心になって、大陸からバリバリやり方を取り入れたんや。
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        可愛いお寺や仏像が、ホンマにようけ（たくさん）作られたんよ。<br>
+                        このセクションでは、飛鳥時代の仏像の2つの**スタイル**を比べてまうで！
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="card">
+                            <h3 class="text-xl font-semibold text-pink-500 mb-3">北魏様式（ほくぎようしき）🎀</h3>
+                            <p class="mb-4">
+                                特徴: 左右がピシッ！って対称で、服のひだ（衣文）が幾何学的なカチッとした感じやねん。<br>
+                                ちょっとクールなイケメンやな！
+                            </p>
+                            <h4 class="font-bold mb-2 text-gray-600">代表的な仏像:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li>飛鳥寺 釈迦如来像</li>
+                                <li>法隆寺金堂 釈迦三尊像</li>
+                                <li>法隆寺夢殿 救世観音像</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="text-xl font-semibold text-pink-500 mb-3">百済・南朝様式（くだら・なんちょうようしき）🌸</h3>
+                            <p class="mb-4">
+                                特徴: 服のひだが自然な感じになって、表情も優しく、ほんわかしてるんよ。<br>
+                                癒やし系やね！
+                            </p>
+                            <h4 class="font-bold mb-2 text-gray-600">代表的な仏像:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li>法隆寺 百済観音像</li>
+                                <li>中宮寺 半跏思惟像</li>
+                                <li>広隆寺 半跏思惟像</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 白鳳文化 -->
+                <article id="era-hakuho" class="era-content hidden space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">🌟フレッシュ！白鳳文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        飛鳥ちゃんの文化をしっかり受け継ぎつつ、若々しくてフレッシュな表現がマシマシになった文化やん。<br>
+                        この頃は、法隆寺金堂壁画や高松塚古墳壁画みたいな、カラフルでめっちゃ素敵な絵画も残されとるんよ。見とれてまうわ！
+                    </p>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold text-pink-500 mb-3">代表的なお寺とアートたち🎨</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                            <li><strong>薬師寺東塔:</strong> 「凍れる音楽」って呼ばれる、ヤバいくらい可愛い三重塔やで！リズム感じるやろ？</li>
+                            <li>
+                                <strong>法隆寺金堂壁画:</strong> インドとか西の国っぽい、国際色豊かで超カワイイ壁画やね。
+                                <span class="text-red-500 font-bold">（残念ながら1949年に火事で燃えてもーたん...）</span>
+                            </li>
+                            <li><strong>高松塚古墳壁画:</strong> 高句麗の壁画と似てて、カラフルでキュートな男の子と女の子たちが描かれとるんよ。絶対見てな！</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- 天平文化 -->
+                <article id="era-tenpyo" class="era-content hidden space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">👑ゴージャス！天平文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        聖武天皇の時代で、「国を守るには仏教が一番や！」ってことで、仏教がド派手にキラキラしてた文化やん。<br>
+                        唐の国際的な文化に影響されて、デカい仏像や建物がいっぱい作られたんよ。<br>
+                        日本で一番古い歴史書や和歌集も、この頃にまとめられたんやで！エライこっちゃ！
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-pink-500 mt-6 mb-4">日本の歴史書、どっちがどっちやっけ？📝</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="card">
+                            <h4 class="text-xl font-semibold mb-2">『古事記』（712年）</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li>作った人: 太安万侶（稗田阿礼が語ったのを文字にしたんや）</li>
+                                <li>特徴: 神様のお話や昔話が入った、物語みたいな感じやね。めっちゃオモロイで！</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h4 class="text-xl font-semibold mb-2">『日本書紀』（720年）</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li>作った人: 舎人親王たち（天皇の命令で国が作った、ガチの公式記録やん）</li>
+                                <li>特徴: 漢文の編年体（年代順）で書かれた、カチッとした歴史書やねん。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-pink-500 mt-6 mb-4">２つの仏像の作り方職人技！💪</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="card">
+                            <h4 class="text-xl font-semibold mb-2">乾漆像（かんしつぞう）</h4>
+                            <p class="text-gray-600">麻の布を漆（うるし）で重ねて固める、お金がめっちゃかかる作り方！メインの仏像はこれで決まりや！</p>
+                            <p class="text-gray-500 text-sm mt-2">（例：不空羂索観音像、阿修羅像）</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="text-xl font-semibold mb-2">塑像（そぞう）</h4>
+                            <p class="text-gray-600">木を芯にして粘土で作る、ちょっとお手軽な作り方やね。周りの像とかに使われたんよ！</p>
+                            <p class="text-gray-500 text-sm mt-2">（例：東大寺法華堂の月光菩薩像・日光菩薩像）</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 弘仁・貞観文化 -->
+                <article id="era-konin" class="era-content hidden space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">🏔️ディープ！弘仁・貞観文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        平安時代スタートの文化で、密教がすっごく大切にされたんよ！<br>
+                        最澄さん（天台宗）と空海さん（真言宗）が新しい仏教を伝えてくれたんね。
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        仏像は一本の木から作る「一木造」がメインで、衣のシワが「翻波式」っていう特徴的な波のパターンになったんやで。渋いけどカッコええんや！
+                    </p>
+                    <h3 class="text-2xl font-bold text-pink-500 mt-6 mb-4">最澄さんと空海さん、どっちも大事や！</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="card">
+                            <h3 class="text-xl font-semibold text-pink-500 mb-3">最澄さん（天台宗）</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li><strong>お山:</strong> 比叡山 延暦寺</li>
+                                <li><strong>特徴:</strong> 法華経が中心やね。</li>
+                                <li><strong>代表作:</strong> 『顕戒論』</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="text-xl font-semibold text-pink-500 mb-3">空海さん（真言宗）</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li><strong>お山:</strong> 高野山 金剛峰寺、東寺</li>
+                                <li><strong>特徴:</strong> 密教を伝えた！お祈り（加持祈禱）をめっちゃ大事にしたんよ。</li>
+                                <li><strong>代表作:</strong> 『三教指帰』</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 国風文化 -->
+                <article id="era-kokufu" class="era-content hidden space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">🎀めっちゃ和風！国風文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        遣唐使をやめた（894年）おかげで、日本のオリジナルの文化がド派手に花開いた時代やん！<br>
+                        かな文字ができて、『源氏物語』みたいな可愛い女性作家さんの作品が大ヒット！
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        建物は寝殿造、仏像はパーツを組み合わせる「寄木造」が完成したんやで！和風ビューティーやな！
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-pink-500 mt-6 mb-4">文学と文字の進化！</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                        <li><strong>かな文字:</strong> 漢字を元に、ひらがな・カタカナが誕生！これで恋文がいっぱい書けるようになったんよ！</li>
+                        <li><strong>物語:</strong> 『竹取物語』（日本で一番古くて有名やん！）、『源氏物語』（紫式部さん💖の超大作！）</li>
+                        <li><strong>随筆:</strong> 『枕草子』（清少納言さんのエッセイ！「春はあけぼの」やで！）、『土佐日記』（紀貫之さん）</li>
+                    </ul>
+
+                    <h3 class="text-2xl font-bold text-pink-500 mt-6 mb-4">浄土教と可愛いアート🖼️</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                        <li><strong>浄土教:</strong> 「南無阿弥陀仏」って唱えて、死んだら極楽に行きたい！って願う優しい教えやね。</li>
+                        <li><strong>建物:</strong> 平等院鳳凰堂（藤原頼通さんが建てた、めっちゃきれいな阿弥陀様のおうち！見たら感動するで！）</li>
+                        <li><strong>仏像:</strong> 寄木造の天才、定朝（じょうちょう）さんが完成させたんよ（平等院阿弥陀如来像）。</li>
+                    </ul>
+                </article>
+
+                <!-- 院政期の文化 -->
+                <article id="era-insei" class="era-content hidden space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">👑上皇さんパワー！院政期文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        上皇さんが政治のリーダーになった時代やん！<br>
+                        貴族の文化が地方にも広まったり（中尊寺金色堂とか）、庶民の出し物（田楽・猿楽）も貴族に受け入れられ始めたんよ。
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        『将門記』みたいな武士のお話も出てき始めた、ノリノリの時代やね！
+                    </p>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold text-pink-500 mb-3">主な特徴まとめ！</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+                            <li><strong>文化の広がり:</strong> 奥州藤原氏による中尊寺金色堂とか、地方にもゴージャスな建物ができたんよ。</li>
+                            <li>
+                                <strong>庶民の流行:</strong> 田楽・猿楽や今様（いまよう）が大人気！<br>
+                                後白河上皇さんが歌集『梁塵秘抄』をまとめたんや。めっちゃ歌うまやったんやろな！
+                            </li>
+                            <li><strong>文学:</strong> 『将門記』みたいな武士の活躍を描いたお話や、『信貴山縁起絵巻』みたいな可愛い絵巻物が作られたんよ。</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- 鎌倉文化 -->
+                <article id="era-kamakura" class="era-content hidden space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">🛡️ガチリアル！鎌倉文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        貴族と武士の文化がミックスされて、力強くてリアルな表現が特徴の文化やん！<br>
+                        運慶さん・快慶さんが作った東大寺南大門の金剛力士像がめっちゃ有名やね。
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        あと、世の中が不安やったから、みんなにわかりやすい「鎌倉新仏教」がドカンとブームになったんよ！
+                    </p>
+                    
+                    <h3 class="text-2xl font-bold text-pink-500 mt-6 mb-4">鎌倉新仏教をマスターしよ！🎓</h3>
+                    <p class="text-gray-700 mb-4">
+                        「お念仏」とか「座禅」とか、簡単な方法で極楽に行ける！っていう優しい教えが特徴やねん。<br>
+                        下のボタンで宗派をバッチリ絞って見てみてな！
+                    </p>
+                    
+                    <div class="flex flex-wrap justify-center gap-4 mb-6">
+                        <button class="k-budd-filter-btn active px-4 py-2 bg-pink-400 text-white rounded-full shadow-md hover:bg-pink-500 transition font-bold" data-filter="all">全部見たるわ！</button>
+                        <button class="k-budd-filter-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-filter="nenbutsu">念仏系ちゃん</button>
+                        <button class="k-budd-filter-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-filter="zen">禅宗ちゃん</button>
+                        <button class="k-budd-filter-btn px-4 py-2 bg-white text-pink-500 border-2 border-pink-300 rounded-full shadow hover:bg-pink-100 transition" data-filter="others">ほかの宗派ちゃん</button>
+                    </div>
+
+                    <div id="kamakura-buddhism-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="card k-budd-card bg-pink-50" data-category="nenbutsu">
+                            <h4 class="text-xl font-semibold mb-2 text-pink-600">浄土宗</h4>
+                            <p><strong>始めた人:</strong> 法然さん</p>
+                            <p><strong>教え:</strong> 専修念仏（ひたすら念仏を唱えるだけ！めっちゃシンプルやで！）</p>
+                        </div>
+                        <div class="card k-budd-card bg-pink-50" data-category="nenbutsu">
+                            <h4 class="text-xl font-semibold mb-2 text-pink-600">浄土真宗（一向宗）</h4>
+                            <p><strong>始めた人:</strong> 親鸞さん</p>
+                            <p><strong>教え:</strong> 悪人正機（悪い人こそ、阿弥陀様の救いのメインターゲットなんよ！）</p>
+                        </div>
+                        <div class="card k-budd-card bg-pink-50" data-category="nenbutsu">
+                            <h4 class="text-xl font-semibold mb-2 text-pink-600">時宗</h4>
+                            <p><strong>始めた人:</strong> 一遍さん</p>
+                            <p><strong>教え:</strong> 踊念仏（踊りながら念仏を唱える！楽しすぎるやろ！）</p>
+                        </div>
+                        <div class="card k-budd-card bg-pink-50" data-category="zen">
+                            <h4 class="text-xl font-semibold mb-2 text-pink-600">臨済宗</h4>
+                            <p><strong>始めた人:</strong> 栄西さん</p>
+                            <p><strong>教え:</strong> 公案問答（先生とのガチトークで悟りを開く修行や！）</p>
+                        </div>
+                        <div class="card k-budd-card bg-pink-50" data-category="zen">
+                            <h4 class="text-xl font-semibold mb-2 text-pink-600">曹洞宗</h4>
+                            <p><strong>始めた人:</strong> 道元さん</p>
+                            <p><strong>教え:</strong> 只管打坐（ただひたすら座禅するだけ！シンプル・イズ・ベストやね）</p>
+                        </div>
+                        <div class="card k-budd-card bg-pink-50" data-category="others">
+                            <h4 class="text-xl font-semibold mb-2 text-pink-600">日蓮宗（法華宗）</h4>
+                            <p><strong>始めた人:</strong> 日蓮さん</p>
+                            <p><strong>教え:</strong> 題目（「南無妙法蓮華経」って、ガツンと唱えるんよ！）</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 室町文化 -->
+                <article id="era-muromachi" class="era-content hidden space-y-6">
+                    <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">🍵奥ゆかしい！室町文化やで！</h2>
+                    <p class="text-lg text-gray-700">
+                        武士と公家と、あと禅宗の文化がめっちゃまざりあった時代やん！<br>
+                        足利義満さんのゴージャスな「北山文化」と、義政さんのシンプルな「東山文化」に大きく分けられるんよ。
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        今の日本文化の基礎はここから始まったんやで！大切やで！
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="card">
+                            <h3 class="text-xl font-semibold text-pink-500 mb-3">北山文化（足利義満さん）✨</h3>
+                            <p class="mb-4">公家文化と武家文化が混ざった、キラキラ豪華な文化やん！</p>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li><strong>建物:</strong> 鹿苑寺金閣（ゴージャスなミックススタイル！金ピカやで！）</li>
+                                <li><strong>芸能:</strong> 能（観阿弥さん・世阿弥さんの親子がすっごく発展させたんよ。渋いけど感動するで！）</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="text-xl font-semibold text-pink-500 mb-3">東山文化（足利義政さん）🌿</h3>
+                            <p class="mb-4">「わび・さび」っていう、シンプルで奥ゆかしい美意識が大切にされたんよ。クールやろ？</p>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                                <li>
+                                    <strong>建物:</strong> 慈照寺銀閣、慈照寺東求堂同仁斎（書院造の完成！超重要やで！）
+                                </li>
+                                <li><strong>茶の湯:</strong> 侘茶（村田珠光さんが始めた、静かで深イイお茶の楽しみ方）</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ===== 2. テーマ別で比べよか！ (テーマ別のコンテンツ) ===== -->
+        <section id="content-theme" class="content-section space-y-12">
+
+            <article id="theme-art-tech" class="space-y-6">
+                <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">テーマ：仏像の作り方の進化やで！🔨</h2>
+                <p class="text-lg text-gray-700">
+                    日本の仏像は、時代とともに材料も作り方もどんどん変わってきたんよ。<br>
+                    それぞれの時代で一番メインになった作り方をこの可愛いグラフで見てみよ！ホンマに変わってるからビックリするで！
+                </p>
+                
+                <div class="card">
+                    <div class="chart-container">
+                        <canvas id="sculptureTechniqueChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-500 mt-4">（このグラフは、各時代で目立ってた技法を分かりやすくしたもんやで、ざっくりやけど許してな！）</p>
+                </div>
+            </article>
+            
+            <article id="theme-literature" class="space-y-6">
+                <h2 class="text-3xl font-extrabold text-pink-500 border-b-4 border-pink-200 pb-2">テーマ：文学の広がりとドリームブーム！📚</h2>
+                <p class="text-lg text-gray-700">
+                    文学は、歴史をまとめることから始まって、かな文字の発明で物語文学が大ブームになるんよ！<br>
+                    時代ごとの主な文学のジャンルと代表作を比べてみるで。見逃したらアカンで！
+                </p>
+                
+                <div class="space-y-6">
+                    <div class="card bg-pink-50">
+                        <h3 class="text-xl font-semibold text-pink-500 mb-3">天平文化（歴史書とガチな漢詩）</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                            <li><strong>歴史書:</strong> 『古事記』、『日本書紀』</li>
+                            <li><strong>漢詩文集:</strong> 『懐風藻』（一番古くて、まじスゴイ！）</li>
+                            <li><strong>和歌集:</strong> 『万葉集』（色んな人の熱い気持ちが詰まってるんやね）</li>
+                        </ul>
+                    </div>
+                    <div class="card bg-pink-50">
+                        <h3 class="text-xl font-semibold text-pink-500 mb-3">国風文化（かな文字で物語が大ヒット！）</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                            <li><strong>勅撰和歌集:</strong> 『古今和歌集』（初めての天皇命令で作った、めっちゃ大事な和歌集や！）</li>
+                            <li><strong>物語:</strong> 『源氏物語』（紫式部さん作の超名作！世界レベルやで💖）</li>
+                            <li><strong>随筆:</strong> 『枕草子』（清少納言さんのエッセイ！当時の流行がわかるんよ！）</li>
+                        </ul>
+                    </div>
+                    <div class="card bg-pink-50">
+                        <h3 class="text-xl font-semibold text-pink-500 mb-3">鎌倉文化（武士のお話と「世の中は無常や...」）</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                            <li><strong>戦争のお話:</strong> 『平家物語』（琵琶法師さんが泣きながら語り継いだんよ）</li>
+                            <li>
+                                <strong>随筆:</strong> 『方丈記』（鴨長明さん）、「無常観」ってやつやね、
+                                『徒然草』（兼好法師さん）
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+        
+        <!-- ===== 3. ドキドキ💕実力試しや！ (Dynamic Quiz Generation Added) ===== -->
+        <section id="content-quiz" class="content-section space-y-8">
+            <h2 class="text-3xl font-extrabold text-pink-600 border-b-4 border-pink-200 pb-2">ドキドキMAX💕実力試しコーナーやん！</h2>
+            <p class="text-lg text-gray-700">
+                共通テストみたいな確認問題に挑戦や！<br>
+                自分の実力をバッチリチェックするで！行くで、本気やで！😤
+            </p>
+            
+            <!-- Dynamic Quiz Generation Section -->
+            <div class="card bg-purple-100 p-6 shadow-2xl border-pink-300">
+                <h3 class="text-2xl font-bold text-pink-600 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap mr-2 text-yellow-500"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    AI先生がノリノリで作るオリジナル問題や！
+                </h3>
+                <p class="text-gray-700 mb-4 text-sm">※ 選んだ時代に合わせて、ノリノリの四択問題をMAX5問までその場で作っちゃうで！ヤバいな！</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label for="quiz-era-select" class="block text-sm font-medium text-gray-700 mb-1">どの時代から出すん？</label>
+                        <select id="quiz-era-select" class="w-full px-4 py-2 border border-pink-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 appearance-none bg-white">
+                            <option value="飛鳥文化">飛鳥時代やん！</option>
+                            <option value="白鳳文化">白鳳時代やん！</option>
+                            <option value="天平文化">天平時代やん！</option>
+                            <option value="弘仁・貞観文化">弘仁・貞観時代やん！</option>
+                            <option value="国風文化">国風時代やん！</option>
+                            <option value="鎌倉文化">鎌倉時代やん！</option>
+                            <option value="室町文化">室町時代やん！</option>
+                            <option value="全て">全時代から（ランダムで運試しや！）</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="quiz-count" class="block text-sm font-medium text-gray-700 mb-1">問題数 (1〜5)</label>
+                        <input type="number" id="quiz-count" value="3" min="1" max="5" class="w-full px-4 py-2 border border-pink-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+                    </div>
+                    <div>
+                        <button id="generate-dynamic-quiz-btn" onclick="generateDynamicQuiz()" class="w-full bg-pink-500 text-white font-extrabold py-2 px-4 rounded-lg hover:bg-pink-600 transition duration-150 transform hover:scale-105 shadow-xl active:scale-100">
+                            よっしゃ！問題作ってもらうで！🌸
+                        </button>
+                    </div>
+                </div>
+                <div id="dynamic-quiz-loading" class="hidden text-center p-4 mt-4 bg-white rounded-xl shadow-inner border border-pink-200">
+                    <div class="loading-spinner"></div>
+                    <p class="mt-2 text-pink-600 font-bold">AI先生、今バリバリ問題作ってるで！しばし待っててな！💨</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Quiz Results Area -->
+            <div id="dynamic-quiz-results" class="space-y-6 mt-8">
+                <!-- AI生成問題がここに入るで！ -->
+            </div>
+            
+            <h3 class="text-2xl font-bold text-pink-500 mt-12 mb-4">✨共通テスト形式の固定問題（これはいつもここにあるで！）</h3>
+
+            <!-- Static Quiz Questions (Q1, Q2, Q3) -->
+            <div id="quiz-container" class="space-y-8">
+                <!-- Question 1: 文化の順序 -->
+                <div class="quiz-question card" data-id="1">
+                    <p class="text-xl font-bold mb-6 pt-2 text-gray-900">問題1. 次の文化を古い順に並べたものとして、正しいものを選んでな。間違えたらアカンで！</p>
+                    <div class="space-y-3" role="radiogroup">
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="1" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">ア. 白鳳文化 → 天平文化 → 弘仁・貞観文化 → 国風文化</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="2" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">イ. 飛鳥文化 → 白鳳文化 → 天平文化 → 国風文化</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="3" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">ウ. 飛鳥文化 → 白鳳文化 → 天平文化 → 弘仁・貞観文化</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="4" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">エ. 天平文化 → 弘仁・貞観文化 → 国風文化 → 院政期文化</span>
+                        </label>
+                    </div>
+                    <button class="quiz-check-btn check-btn" data-id="1">答え、見たろか！👁️</button>
+                    <div class="quiz-result" data-id="1"></div>
+                </div>
+
+                <!-- Question 2: 鎌倉新仏教と教え -->
+                <div class="quiz-question card" data-id="2">
+                    <p class="text-xl font-bold mb-6 pt-2 text-gray-900">問題2. 鎌倉新仏教とその教えの組み合わせで、間違ってるもんを選んでな。しっかり考えてや！</p>
+                    <div class="space-y-3" role="radiogroup">
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="1" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">ア. 浄土宗 — 専修念仏</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="2" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">イ. 浄土真宗 — 悪人正機</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="3" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">ウ. 臨済宗 — 只管打坐</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="4" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">エ. 日蓮宗 — 題目（南無妙法蓮華経）</span>
+                        </label>
+                    </div>
+                    <button class="quiz-check-btn check-btn" data-id="2">答え、見たろか！👁️</button>
+                    <div class="quiz-result" data-id="2"></div>
+                </div>
+                
+                <!-- Question 3: 室町文化の比較 -->
+                <div class="quiz-question card" data-id="3">
+                    <p class="text-xl font-bold mb-6 pt-2 text-gray-900">問題3. 室町時代の北山文化・東山文化に関する説明で、正しいもんを選んでな。どっちがどっちやっけ？</p>
+                    <div class="space-y-3" role="radiogroup">
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="1" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">ア. 北山文化は、シンプルで奥ゆかしい「わび・さび」の美意識を完成させたんや。</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="2" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">イ. 鹿苑寺金閣は、東山文化を代表する建物で、書院造が使われとる。</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="3" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">ウ. 東山文化の頃に、村田珠光さんが侘茶を始めて、慈照寺銀閣が建てられたんや。</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="4" class="mr-3 flex-shrink-0">
+                            <span class="font-medium text-gray-700">エ. 東山文化では、能を観阿弥さん・世阿弥さんの親子が完成させて、武家と公家の文化が混ざり合ったんや。</span>
+                        </label>
+                    </div>
+                    <button class="quiz-check-btn check-btn" data-id="3">答え、見たろか！👁️</button>
+                    <div class="quiz-result" data-id="3"></div>
+                </div>
+                
+            </div>
+            
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-pink-300 mt-12 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>このノリノリ可愛いアプリは、みんなが楽しく学べるように一生懸命作ったもんやで！💖</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Gemini API Constants ---
+        const apiKey = ""; // API KeyはCanvas環境により自動で設定されます
+        const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+
+        // --- Global Elements ---
+        const generateDynamicQuizBtn = document.getElementById('generate-dynamic-quiz-btn');
+        const dynamicQuizLoading = document.getElementById('dynamic-quiz-loading');
+        const dynamicQuizResults = document.getElementById('dynamic-quiz-results');
+
+        // --- JSON Schema for Quiz Generation ---
+        const dynamicQuizSchema = {
+            type: "ARRAY",
+            items: {
+                type: "OBJECT",
+                properties: {
+                    "question": { "type": "STRING", description: "四択問題の質問文。ノリノリで元気な関西弁で記述。" },
+                    "options": {
+                        "type": "ARRAY",
+                        "items": { "type": "STRING" },
+                        "description": "必ず4つの選択肢を含める。"
+                    },
+                    "answerIndex": { "type": "INTEGER", description: "正解の選択肢のインデックス (0, 1, 2, or 3)" },
+                    "explanation": { "type": "STRING", description: "正解の根拠となる詳細な解説。ノリノリで元気な関西弁で記述。読者が読みやすいように適度に改行記号(\\n\\n)を入れる。" }
+                },
+                "required": ["question", "options", "answerIndex", "explanation"]
+            }
+        };
+
+        /**
+         * 解答と解説の表示を切り替える (Dynamic Quiz用)
+         * @param {number} index - 問題のインデックス (Static Quizとは別)
+         */
+        window.toggleAnswer = function(index) {
+            const answerSection = document.getElementById(`dynamic-answer-${index}`);
+            const button = document.querySelector(`#dynamic-q-${index} .reveal-answer-btn`);
+            
+            if (!answerSection || !button) return;
+
+            if (answerSection.classList.contains('hidden')) {
+                answerSection.classList.remove('hidden');
+                button.textContent = '解説、もう見たやろ！隠すで！';
+                button.classList.remove('bg-pink-500');
+                button.classList.add('bg-purple-500'); // Cuter color change
+            } else {
+                answerSection.classList.add('hidden');
+                button.textContent = '答えと解説、見たいか？💖';
+                button.classList.add('bg-pink-500');
+                button.classList.remove('bg-purple-500');
+            }
+        }
+
+        /**
+         * AIによる動的な問題生成を実行する
+         */
+        window.generateDynamicQuiz = async function() {
+            const era = document.getElementById('quiz-era-select').value;
+            const countInput = document.getElementById('quiz-count');
+            
+            let count = parseInt(countInput.value, 10);
+            if (isNaN(count) || count < 1 || count > 5) {
+                count = 3; // デフォルト値
+                countInput.value = 3;
+            }
+
+            // UIの更新: ロード開始やで！
+            dynamicQuizResults.innerHTML = '';
+            dynamicQuizLoading.classList.remove('hidden');
+            generateDynamicQuizBtn.disabled = true;
+            generateDynamicQuizBtn.textContent = 'AI先生、今バリバリ問題作ってるで！しばし待っててな！💨';
+
+            let topic = (era === '全て') ? '飛鳥時代から室町時代までの日本の文化史' : `${era}の文化史`;
+            
+            // System Promptに関西弁での応答と、可愛らしいトーンを指示。関西弁マシマシやで！
+            const systemPrompt = "あなたは高校の日本史文化史の可愛いAI先生やで。ユーザーが指定した時代について、共通テスト形式の四択問題を正確な情報に基づいて" + count + "問作ってな。回答形式は必ずJSONを使うんや。質問文や解説は、ノリノリで元気な、キュートな関西弁（大阪弁）で書くんやで。語尾は「やん！」「やで！」「か！」「どないやねん！」を多用してな。解説文は読みやすいように適度に改行記号(\\n\\n)を入れてな。Google検索を使って問題を構築してや。";
+            const userQuery = `トピック: 「${topic}」。問題形式: 四択問題。問題数: ${count}問。`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: dynamicQuizSchema
+                },
+            };
+
+            let quizData = null;
+            let attempts = 0;
+            const maxAttempts = 3;
+
+            // Exponential Backoffを用いたAPIコールや！
+            while (attempts < maxAttempts) {
+                try {
+                    const delay = Math.pow(2, attempts) * 1000;
+                    if (attempts > 0) await new Promise(resolve => setTimeout(resolve, delay));
+
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429) { // Rate limit error
+                        attempts++;
+                        continue;
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                    if (!jsonText) {
+                        throw new Error("APIから有効なJSONテキストが返されへんかったで！");
+                    }
+                    
+                    quizData = JSON.parse(jsonText);
+                    break; 
+
+                } catch (error) {
+                    console.error("API呼び出しまたはJSON解析エラー:", error);
+                    attempts++;
+                    if (attempts === maxAttempts) {
+                        dynamicQuizResults.innerHTML = `<div class="p-4 bg-red-100 text-red-700 rounded-xl">うわぁん😭問題作成失敗や...。ごめんな、電波悪いんちゃう？もう一回挑戦してな！🙏</div>`;
+                    }
+                }
+            }
+            
+            // UIの更新: ロード終了やで！
+            dynamicQuizLoading.classList.add('hidden');
+            generateDynamicQuizBtn.disabled = false;
+            generateDynamicQuizBtn.textContent = 'よっしゃ！問題作ってもらうで！🌸';
+
+            if (quizData) {
+                displayDynamicQuiz(quizData, era);
+            }
+        }
+
+        /**
+         * 生成された問題をUIに表示するで！
+         * @param {Array<Object>} quizData - 問題データの配列
+         * @param {string} era - 選択された時代名
+         */
+        function displayDynamicQuiz(quizData, era) {
+            let eraText = (era === '全て') ? '全時代' : era.replace('ちゃん', '').replace('文化', '');
+            let html = `<h3 class="text-2xl font-bold text-gray-800 border-b-2 border-pink-500 pb-2 mb-6">🎀${eraText}に関するAI先生からのノリノリ問題やん！</h3>`;
+
+            if (quizData.length === 0) {
+                html += `<p class="text-gray-600 p-4 bg-yellow-50 rounded-lg">うーん、この時代はちょっと難しくて問題が作られへんかったわ。ごめんね、他の時代で試してみてな！</p>`;
+                dynamicQuizResults.innerHTML = html;
+                return;
+            }
+
+            quizData.forEach((item, index) => {
+                const answerLetter = String.fromCharCode(65 + item.answerIndex);
+                
+                // 動的クイズのHTML構造を強化
+                html += `
+                    <div class="quiz-card card p-6 rounded-3xl border-l-8 border-pink-400 shadow-2xl transition duration-300 transform hover:scale-[1.01]" id="dynamic-q-${index}">
+                        <p class="text-sm font-extrabold text-pink-600 mb-3">AI先生の熱血問題 ${index + 1} (${eraText})</p>
+                        <p class="text-xl font-bold text-gray-900 mb-6">${item.question}</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            ${item.options.map((opt, i) => `
+                                <div class="quiz-option text-gray-700 cursor-default">
+                                    <span class="font-bold mr-3 w-5 text-center text-pink-500 flex-shrink-0">${String.fromCharCode(65 + i)}.</span>
+                                    <span class="flex-1">${opt}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <button 
+                            class="reveal-answer-btn bg-pink-500 text-white text-base font-extrabold py-3 px-6 rounded-full hover:bg-pink-600 transition duration-150 transform hover:scale-105 active:scale-100 shadow-md"
+                            onclick="toggleAnswer(${index})"
+                        >
+                            答えと解説、見たいか？💖
+                        </button>
+
+                        <div id="dynamic-answer-${index}" class="answer-section mt-6 p-5 bg-purple-100 rounded-2xl border-2 border-pink-300 shadow-inner hidden">
+                            <div class="flex items-center mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle text-green-600 mr-2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                                <p class="font-extrabold text-pink-700 text-lg">【大正解やん！】</p>
+                            </div>
+                            <p class="text-2xl font-bold text-gray-800 ml-8 mb-4">
+                                <span class="text-pink-600">${answerLetter}</span>が正解やで！
+                            </p>
+                            
+                            <p class="font-bold text-gray-700 border-t border-pink-300 pt-4 mt-4">【AI先生からの激アツ解説や！】</p>
+                            <!-- NOTE: whitespace-pre-wrap で改行を反映させるで！ -->
+                            <p class="text-gray-600 whitespace-pre-wrap mt-2">${item.explanation}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            dynamicQuizResults.innerHTML = html;
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const mainNavButtons = document.querySelectorAll('#main-nav .nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+            const eraTabButtons = document.querySelectorAll('.era-tab-btn');
+            const eraContentArticles = document.querySelectorAll('.era-content');
+            const kamakuraFilterButtons = document.querySelectorAll('.k-budd-filter-btn');
+            const kamakuraCards = document.querySelectorAll('.k-budd-card');
+            const quizCheckButtons = document.querySelectorAll('.check-btn');
+
+            // --- Quiz Data (Static) ---
+            // 改行記号 \n\n を入れて、CSSで読みやすくするで！
+            const quizData = {
+                1: {
+                    answer: '3',
+                    explanation: '正解は「飛鳥文化 → 白鳳文化 → 天平文化 → 弘仁・貞観文化」の順番やで！\n\n飛鳥時代と奈良時代（白鳳・天平）、平安時代前期（弘仁・貞観）の流れをしっかり掴むんや。\n国風文化は弘仁・貞観文化の次、平安中期（摂関政治の頃）の文化やからね。\n順番間違えたらアカンよ！しっかり覚えときや！'
+                },
+                2: {
+                    answer: '3',
+                    explanation: '間違ってるんは「ウ」やで！\n\n臨済宗（栄西さん）の教えは「公案問答」で、ひたすら座禅する「只管打坐」は曹洞宗（道元さんが始めたんよ）の教えやからね。\n禅宗のこの２つはごっちゃにしたらあかんで！'
+                },
+                3: {
+                    answer: '3',
+                    explanation: '正解は「ウ」やん！\n\n東山文化の頃に、村田珠光さんが侘茶を始めて、慈照寺銀閣（銀閣寺）が建てられたんよ。「わび・さび」っていう奥ゆかしい美意識が東山文化のキーワードやで！\n義満さんの金閣（北山文化）と、義政さんの銀閣（東山文化）は対比でめっちゃ出やすいから、絶対チェックやで！'
+                }
+            };
+            
+            // --- Main Navigation Logic ---
+            function switchMainTab(targetId) {
+                mainNavButtons.forEach(btn => {
+                    if (btn.dataset.target === targetId) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                contentSections.forEach(section => {
+                    if (section.id === `content-${targetId}`) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+
+                if (targetId === 'theme') {
+                    initCharts();
+                }
+            }
+
+            // --- Era Tab Logic (Section 1) ---
+            function switchEraTab(targetEra) {
+                eraTabButtons.forEach(btn => {
+                    if (btn.dataset.era === targetEra) {
+                        btn.classList.add('active', 'bg-pink-400', 'text-white', 'font-bold');
+                        btn.classList.remove('bg-white', 'text-pink-500', 'border-pink-300');
+                    } else {
+                        btn.classList.remove('active', 'bg-pink-400', 'text-white', 'font-bold');
+                        btn.classList.add('bg-white', 'text-pink-500', 'border-pink-300');
+                    }
+                });
+
+                eraContentArticles.forEach(article => {
+                    if (article.id === `era-${targetEra}`) {
+                        article.classList.add('active');
+                        article.classList.remove('hidden');
+                    } else {
+                        article.classList.remove('active');
+                        article.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // --- Kamakura Filter Logic (Section 1) ---
+            function filterKamakuraBuddhism(filter) {
+                kamakuraFilterButtons.forEach(btn => {
+                     if (btn.dataset.filter === filter) {
+                        btn.classList.add('active', 'bg-pink-400', 'text-white', 'font-bold');
+                        btn.classList.remove('bg-white', 'text-pink-500', 'border-pink-300');
+                    } else {
+                        btn.classList.remove('active', 'bg-pink-400', 'text-white', 'font-bold');
+                        btn.classList.add('bg-white', 'text-pink-500', 'border-pink-300');
+                    }
+                });
+
+                kamakuraCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            // --- Chart Logic (Section 2) ---
+            let techniqueChart = null;
+            function initCharts() {
+                const ctx = document.getElementById('sculptureTechniqueChart');
+                if (!ctx || techniqueChart) return;
+
+                const data = {
+                    labels: ['飛鳥', '天平', '弘仁・貞観', '国風(平安中期)', '鎌倉'],
+                    datasets: [
+                        {
+                            label: '金銅像・その他',
+                            data: [1, 0, 0, 0, 0],
+                            backgroundColor: '#FBCFE8', /* Pink-200 */
+                        },
+                        {
+                            label: '乾漆像',
+                            data: [0, 1, 0, 0, 0],
+                            backgroundColor: '#F472B6', /* Pink-400 */
+                        },
+                        {
+                            label: '塑像',
+                            data: [0, 1, 0, 0, 0],
+                            backgroundColor: '#C084FC', /* Violet-400 */
+                        },
+                        {
+                            label: '一木造',
+                            data: [0, 0, 1, 0, 0],
+                            backgroundColor: '#FCD34D', /* Amber-300 */
+                        },
+                         {
+                            label: '寄木造',
+                            data: [0, 0, 0, 1, 1],
+                            backgroundColor: '#FCA5A5', /* Red-300 (Softer) */
+                        }
+                    ]
+                };
+
+                techniqueChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                title: { display: true, text: '時代やで', font: { size: 16 } } // キュートな関西弁
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                ticks: { display: false }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '各時代でメインやった仏像の作り方💖', // キュートな関西弁
+                                font: { size: 20, weight: 'bold' },
+                                padding: { top: 10, bottom: 20 }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.dataset.data[context.dataIndex] > 0) {
+                                            return ` ${context.dataset.label} (メインやで！) `;
+                                        }
+                                        return null;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- Quiz Logic (Static) ---
+            function checkQuiz(questionId) {
+                const questionElement = document.querySelector(`.quiz-question[data-id="${questionId}"]`);
+                const resultElement = document.querySelector(`.quiz-result[data-id="${questionId}"]`);
+                const selected = questionElement.querySelector(`input[name="q${questionId}"]:checked`);
+                const correctAnswer = quizData[questionId].answer;
+                const explanation = quizData[questionId].explanation;
+
+                resultElement.innerHTML = ''; // 結果をリセット
+
+                if (!selected) {
+                    resultElement.innerHTML = `<div class="quiz-result-box bg-yellow-100 text-yellow-800 border-2 border-yellow-300 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle mr-3 flex-shrink-0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                        ちょっと！どれか選ばな始まらへんやんか！しっかり選んでな！😤
+                    </div>`; // 関西弁マシマシ
+                    return;
+                }
+
+                const selectedValue = selected.value;
+                let resultBox;
+
+                if (selectedValue === correctAnswer) {
+                    resultBox = `<div class="quiz-result-box bg-pink-100 text-pink-800 border-pink-400">
+                                    <div class="flex items-center mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-handshake text-pink-600 mr-3 flex-shrink-0"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5"/><path d="M12 6.5 17 11l4-7"/><path d="m15 15-4 4"/></svg>
+                                        <span class="text-2xl font-extrabold">💖 大正解やん！天才すぎてビビったわ！ 💖</span>
+                                    </div>
+                                    <span class="quiz-explanation text-pink-700">【激アツ解説】${explanation}</span>
+                                 </div>`; // 関西弁マシマシ
+                } else {
+                    resultBox = `<div class="quiz-result-box bg-red-100 text-red-800 border-red-400">
+                                    <div class="flex items-center mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-frown text-red-600 mr-3 flex-shrink-0"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="10" y2="10"/><line x1="15" x2="15.01" y1="10" y2="10"/></svg>
+                                        <span class="text-2xl font-extrabold">あちゃ〜、残念！ハズレてもーたわ... 💦</span>
+                                    </div>
+                                    <span class="quiz-explanation text-red-700">
+                                        正解は**${correctAnswer}**やで！もう一回復習して、次こそは正解したってや！\n\n
+                                        【激アツ解説】${explanation}
+                                    </span>
+                                </div>`; // 関西弁マシマシ
+                }
+
+                resultElement.innerHTML = resultBox;
+            }
+
+            // --- Event Listeners ---
+            mainNavButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    switchMainTab(button.dataset.target);
+                });
+            });
+
+            eraTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    switchEraTab(button.dataset.era);
+                });
+            });
+            
+            kamakuraFilterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterKamakuraBuddhism(button.dataset.filter);
+                });
+            });
+            
+            quizCheckButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    checkQuiz(button.dataset.id);
+                });
+            });
+
+
+            // Initial loadや！
+            switchMainTab('era');
+            switchEraTab('asuka');
+            filterKamakuraBuddhism('all');
+        });
+    </script>
+</body>
+</html>
